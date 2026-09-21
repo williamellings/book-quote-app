@@ -1,0 +1,128 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+      <div class="card card-hover shadow-sm rounded-4 border-0 p-4 p-md-5">
+        <div class="text-center mb-4">
+          <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-3" style="width: 64px; height: 64px;">
+            <i class="fa-solid fa-user-plus fs-3"></i>
+          </div>
+          <h2 class="fw-bold">Skapa konto</h2>
+          <p class="text-muted">Fyll i dina uppgifter för att börja hantera böcker och citat.</p>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="alert alert-danger d-flex align-items-center gap-2 mb-4" role="alert">
+            <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
+            <div>{{ errorMessage() }}</div>
+          </div>
+        }
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Username -->
+          <div class="mb-3">
+            <label for="reg-username" class="form-label fw-semibold">Användarnamn</label>
+            <div class="input-group">
+              <span class="input-group-text bg-body-tertiary border-end-0">
+                <i class="fa-solid fa-user text-muted"></i>
+              </span>
+              <input
+                id="reg-username"
+                type="text"
+                class="form-control border-start-0 ps-0"
+                formControlName="username"
+                placeholder="T.ex. bokalskaren"
+                [class.is-invalid]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+              />
+            </div>
+            @if (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) {
+              <div class="text-danger small mt-1">Användarnamnet måste vara mellan 3 och 50 tecken.</div>
+            }
+          </div>
+
+          <!-- Email -->
+          <div class="mb-3">
+            <label for="reg-email" class="form-label fw-semibold">E-postadress</label>
+            <div class="input-group">
+              <span class="input-group-text bg-body-tertiary border-end-0">
+                <i class="fa-solid fa-envelope text-muted"></i>
+              </span>
+              <input
+                id="reg-email"
+                type="email"
+                class="form-control border-start-0 ps-0"
+                formControlName="email"
+                placeholder="namn@exempel.se"
+                [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+              />
+            </div>
+            @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+              <div class="text-danger small mt-1">Ange en giltig e-postadress.</div>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="mb-3">
+            <label for="reg-password" class="form-label fw-semibold">Lösenord</label>
+            <div class="input-group">
+              <span class="input-group-text bg-body-tertiary border-end-0">
+                <i class="fa-solid fa-key text-muted"></i>
+              </span>
+              <input
+                id="reg-password"
+                type="password"
+                class="form-control border-start-0 ps-0"
+                formControlName="password"
+                placeholder="Minst 6 tecken"
+                [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+              />
+            </div>
+            @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+              <div class="text-danger small mt-1">Lösenordet måste innehålla minst 6 tecken.</div>
+            }
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="mb-4">
+            <label for="reg-confirmPassword" class="form-label fw-semibold">Bekräfta lösenord</label>
+            <div class="input-group">
+              <span class="input-group-text bg-body-tertiary border-end-0">
+                <i class="fa-solid fa-check-double text-muted"></i>
+              </span>
+              <input
+                id="reg-confirmPassword"
+                type="password"
+                class="form-control border-start-0 ps-0"
+                formControlName="confirmPassword"
+                placeholder="Upprepa lösenord"
+                [class.is-invalid]="(registerForm.get('confirmPassword')?.touched && registerForm.hasError('mismatch'))"
+              />
+            </div>
+            @if (registerForm.get('confirmPassword')?.touched && registerForm.hasError('mismatch')) {
+              <div class="text-danger small mt-1">Lösenorden matchar inte varandra.</div>
+            }
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            class="btn btn-primary-gradient w-100 py-2 rounded-pill fw-semibold d-flex align-items-center justify-content-center gap-2 mb-3"
+            [disabled]="isLoading()"
+          >
+            @if (isLoading()) {
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span>Skapar konto...</span>
+            } @else {
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Skapa konto & Logga in</span>
+            }
+          </button>
+
+          <div class="text-center pt-3 border-top">
+            <span class="text-muted">Har du redan ett konto? </span>
+            <a routerLink="/login" class="fw-semibold text-decoration-none">Logga in här</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

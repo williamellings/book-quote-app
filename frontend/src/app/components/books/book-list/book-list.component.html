@@ -1,0 +1,200 @@
+<div class="container py-4">
+  <!-- Header / Hero Section -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4 pb-3 border-bottom">
+    <div>
+      <h1 class="h2 fw-bold mb-1">
+        <i class="fa-solid fa-book text-primary me-2"></i>Bokbibliotek
+      </h1>
+      <p class="text-muted mb-0">Här kan du se, lägga till, redigera och ta bort böcker i systemet.</p>
+    </div>
+
+    <div>
+      <a routerLink="/books/new" class="btn btn-primary-gradient rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm">
+        <i class="fa-solid fa-circle-plus fs-5"></i>
+        <span class="fw-semibold">Lägg till ny bok</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Notification Alerts -->
+  @if (successMessage()) {
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+      <i class="fa-solid fa-circle-check fs-5"></i>
+      <div>{{ successMessage() }}</div>
+      <button type="button" class="btn-close" (click)="successMessage.set(null)" aria-label="Stäng"></button>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center gap-2 mb-4" role="alert">
+      <i class="fa-solid fa-triangle-exclamation fs-5"></i>
+      <div>{{ errorMessage() }}</div>
+      <button type="button" class="btn-close" (click)="errorMessage.set(null)" aria-label="Stäng"></button>
+    </div>
+  }
+
+  <!-- Search & Filter Toolbar -->
+  <div class="card shadow-sm border-0 rounded-4 p-3 mb-4 bg-body">
+    <div class="row g-2 align-items-center">
+      <div class="col-12 col-md-6">
+        <div class="input-group">
+          <span class="input-group-text bg-transparent border-end-0">
+            <i class="fa-solid fa-magnifying-glass text-muted"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control border-start-0 ps-0"
+            placeholder="Sök efter titel, författare eller genre..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+          />
+          @if (searchTerm) {
+            <button class="btn btn-outline-secondary" type="button" (click)="clearSearch()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          }
+          <button class="btn btn-primary" type="button" (click)="onSearch()">
+            Sök
+          </button>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 text-md-end text-muted small">
+        <span>Visar <strong>{{ books().length }}</strong> {{ books().length === 1 ? 'bok' : 'böcker' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Laddar böcker...</span>
+      </div>
+      <p class="text-muted">Hämtar boklistan från API:et...</p>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!isLoading() && books().length === 0) {
+    <div class="card border-0 shadow-sm rounded-4 text-center p-5 bg-body">
+      <div class="mb-3">
+        <i class="fa-solid fa-book-open text-muted" style="font-size: 4rem; opacity: 0.4;"></i>
+      </div>
+      <h3 class="fw-semibold">Inga böcker hittades</h3>
+      <p class="text-muted mb-4">
+        {{ searchTerm ? 'Inga böcker matchade din sökning "' + searchTerm + '".' : 'Det finns inga böcker i biblioteket ännu. Varför inte lägga till den första?' }}
+      </p>
+      <div>
+        @if (searchTerm) {
+          <button class="btn btn-outline-secondary me-2 rounded-pill px-3" (click)="clearSearch()">
+            <i class="fa-solid fa-arrow-rotate-left me-1"></i> Rensa filter
+          </button>
+        }
+        <a routerLink="/books/new" class="btn btn-primary-gradient rounded-pill px-4">
+          <i class="fa-solid fa-plus me-1"></i> Lägg till ny bok
+        </a>
+      </div>
+    </div>
+  }
+
+  <!-- Books Grid / Responsive Cards -->
+  @if (!isLoading() && books().length > 0) {
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      @for (book of books(); track book.id) {
+        <div class="col">
+          <div class="card h-100 card-hover shadow-sm rounded-4 border-0 bg-body d-flex flex-column">
+            <div class="card-body p-4 d-flex flex-column">
+              <!-- Genre badge & date -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="badge bg-primary-subtle text-primary-emphasis badge-category">
+                  <i class="fa-solid fa-bookmark me-1"></i>{{ book.genre || 'Allmän' }}
+                </span>
+                @if (book.publishedDate) {
+                  <span class="text-muted small">
+                    <i class="fa-regular fa-calendar me-1"></i>{{ book.publishedDate | date:'yyyy' }}
+                  </span>
+                }
+              </div>
+
+              <!-- Title & Author -->
+              <h5 class="card-title fw-bold mb-1 text-truncate" [title]="book.title">
+                {{ book.title }}
+              </h5>
+              <p class="text-muted small mb-3">
+                <i class="fa-solid fa-pen-nib text-secondary me-1"></i>{{ book.author }}
+              </p>
+
+              <!-- Description -->
+              <p class="card-text text-secondary small flex-grow-1 line-clamp-3">
+                {{ book.description || 'Ingen beskrivning tillgänglig för denna bok.' }}
+              </p>
+
+              <!-- Footer with Action Buttons -->
+              <div class="d-flex align-items-center justify-content-between pt-3 mt-3 border-top">
+                <span class="text-muted small">
+                  <i class="fa-solid fa-user-tag me-1"></i>{{ book.addedByUsername || 'System' }}
+                </span>
+
+                <div class="d-flex gap-2">
+                  <a
+                    [routerLink]="['/books/edit', book.id]"
+                    class="btn btn-sm btn-outline-primary rounded-pill px-3 d-flex align-items-center gap-1"
+                    title="Redigera bok"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Redigera</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger rounded-pill px-3 d-flex align-items-center gap-1"
+                    (click)="openDeleteModal(book)"
+                    title="Radera bok"
+                  >
+                    <i class="fa-solid fa-trash-can"></i>
+                    <span>Radera</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Delete Confirmation Modal (Native Accessible Backdrop) -->
+  @if (bookToDelete()) {
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);" role="dialog" aria-modal="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+          <div class="modal-header border-0 pb-0">
+            <h5 class="modal-title fw-bold text-danger d-flex align-items-center gap-2">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>Bekräfta radering</span>
+            </h5>
+            <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Stäng"></button>
+          </div>
+          <div class="modal-body py-3">
+            <p>Är du säker på att du vill ta bort boken <strong>"{{ bookToDelete()?.title }}"</strong>?</p>
+            <p class="text-muted small mb-0">Denna åtgärd kan inte ångras och boken försvinner permanent från listan.</p>
+          </div>
+          <div class="modal-footer border-0 pt-0">
+            <button type="button" class="btn btn-outline-secondary rounded-pill px-3" (click)="cancelDelete()" [disabled]="isDeleting()">
+              Avbryt
+            </button>
+            <button type="button" class="btn btn-danger rounded-pill px-4 d-flex align-items-center gap-2" (click)="confirmDelete()" [disabled]="isDeleting()">
+              @if (isDeleting()) {
+                <span class="spinner-border spinner-border-sm" role="status"></span>
+                <span>Raderar...</span>
+              } @else {
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Ja, radera</span>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

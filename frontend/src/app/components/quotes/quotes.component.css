@@ -1,0 +1,10 @@
+.blockquote {
+  margin-bottom: 0.5rem;
+}
+.input-group-text {
+  border-right: none;
+}
+.form-control:focus {
+  box-shadow: none;
+  border-color: #4f46e5;
+}

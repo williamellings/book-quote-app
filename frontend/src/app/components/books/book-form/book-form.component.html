@@ -1,0 +1,156 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      <!-- Breadcrumb navigation -->
+      <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a routerLink="/books" class="text-decoration-none">Böcker</a></li>
+          <li class="breadcrumb-item active" aria-current="page">{{ isEditMode() ? 'Redigera bok' : 'Ny bok' }}</li>
+        </ol>
+      </nav>
+
+      <!-- Main Form Card -->
+      <div class="card card-hover shadow-sm rounded-4 border-0 p-4 p-md-5 bg-body">
+        <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+          <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle" style="width: 52px; height: 52px;">
+            <i class="fa-solid" [class.fa-book-medical]="!isEditMode()" [class.fa-pen-to-square]="isEditMode()" style="font-size: 1.5rem;"></i>
+          </div>
+          <div>
+            <h2 class="h3 fw-bold mb-1">{{ isEditMode() ? 'Redigera bok' : 'Lägg till ny bok' }}</h2>
+            <p class="text-muted mb-0">{{ isEditMode() ? 'Uppdatera informationen för boken nedan.' : 'Fyll i bokens titel, författare och övriga uppgifter.' }}</p>
+          </div>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="alert alert-danger d-flex align-items-center gap-2 mb-4" role="alert">
+            <i class="fa-solid fa-circle-exclamation fs-5 flex-shrink-0"></i>
+            <div>{{ errorMessage() }}</div>
+          </div>
+        }
+
+        @if (isLoading()) {
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="text-muted mt-2">Hämtar bokdetaljer...</p>
+          </div>
+        } @else {
+          <form [formGroup]="bookForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Title -->
+            <div class="mb-3">
+              <label for="book-title" class="form-label fw-semibold">
+                Titel <span class="text-danger">*</span>
+              </label>
+              <div class="input-group">
+                <span class="input-group-text bg-body-tertiary border-end-0">
+                  <i class="fa-solid fa-heading text-muted"></i>
+                </span>
+                <input
+                  id="book-title"
+                  type="text"
+                  class="form-control border-start-0 ps-0"
+                  formControlName="title"
+                  placeholder="T.ex. Kallocain, Aniara..."
+                  [class.is-invalid]="bookForm.get('title')?.invalid && bookForm.get('title')?.touched"
+                />
+              </div>
+              @if (bookForm.get('title')?.invalid && bookForm.get('title')?.touched) {
+                <div class="text-danger small mt-1">Boktitel är obligatorisk (max 200 tecken).</div>
+              }
+            </div>
+
+            <!-- Author & Genre Row -->
+            <div class="row g-3 mb-3">
+              <div class="col-12 col-md-6">
+                <label for="book-author" class="form-label fw-semibold">
+                  Författare <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-body-tertiary border-end-0">
+                    <i class="fa-solid fa-user-pen text-muted"></i>
+                  </span>
+                  <input
+                    id="book-author"
+                    type="text"
+                    class="form-control border-start-0 ps-0"
+                    formControlName="author"
+                    placeholder="Författarens fullständiga namn"
+                    [class.is-invalid]="bookForm.get('author')?.invalid && bookForm.get('author')?.touched"
+                  />
+                </div>
+                @if (bookForm.get('author')?.invalid && bookForm.get('author')?.touched) {
+                  <div class="text-danger small mt-1">Författare är obligatorisk (max 100 tecken).</div>
+                }
+              </div>
+
+              <div class="col-12 col-md-6">
+                <label for="book-genre" class="form-label fw-semibold">Genre / Kategori</label>
+                <div class="input-group">
+                  <span class="input-group-text bg-body-tertiary border-end-0">
+                    <i class="fa-solid fa-tag text-muted"></i>
+                  </span>
+                  <input
+                    id="book-genre"
+                    type="text"
+                    class="form-control border-start-0 ps-0"
+                    formControlName="genre"
+                    placeholder="T.ex. Dystopi, Roman, Skönlitteratur"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Published Date -->
+            <div class="mb-3">
+              <label for="book-date" class="form-label fw-semibold">Publiceringsdatum</label>
+              <div class="input-group">
+                <span class="input-group-text bg-body-tertiary border-end-0">
+                  <i class="fa-solid fa-calendar-day text-muted"></i>
+                </span>
+                <input
+                  id="book-date"
+                  type="date"
+                  class="form-control border-start-0 ps-0"
+                  formControlName="publishedDate"
+                />
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+              <label for="book-desc" class="form-label fw-semibold">Beskrivning / Sammanfattning</label>
+              <textarea
+                id="book-desc"
+                class="form-control"
+                rows="4"
+                formControlName="description"
+                placeholder="Skriv en kort sammanfattning om boken..."
+              ></textarea>
+              <div class="form-text">Max 1000 tecken.</div>
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex align-items-center justify-content-end gap-3 pt-3 border-top">
+              <a routerLink="/books" class="btn btn-outline-secondary rounded-pill px-4">
+                <i class="fa-solid fa-arrow-left me-1"></i> Avbryt
+              </a>
+
+              <button
+                type="submit"
+                class="btn btn-primary-gradient rounded-pill px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm"
+                [disabled]="isSubmitting()"
+              >
+                @if (isSubmitting()) {
+                  <span class="spinner-border spinner-border-sm" role="status"></span>
+                  <span>Sparar...</span>
+                } @else {
+                  <i class="fa-solid fa-floppy-disk"></i>
+                  <span>{{ isEditMode() ? 'Uppdatera bok' : 'Spara bok' }}</span>
+                }
+              </button>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+</div>

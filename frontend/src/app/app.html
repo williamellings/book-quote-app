@@ -1,0 +1,23 @@
+<div class="d-flex flex-column min-vh-100">
+  <app-navbar></app-navbar>
+
+  <main class="flex-grow-1">
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer class="py-4 border-top mt-auto bg-body-tertiary">
+    <div class="container text-center text-muted small">
+      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+        <div>
+          <i class="fa-solid fa-book-bookmark text-primary me-1"></i>
+          <strong>Bok & Citatportalen</strong> &copy; 2026. Byggd med Angular 20 &amp; .NET 9.
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <span><i class="fa-solid fa-shield-halved text-success me-1"></i>JWT-autentisering</span>
+          <span><i class="fa-brands fa-bootstrap text-primary me-1"></i>Bootstrap 5</span>
+          <span><i class="fa-solid fa-palette text-warning me-1"></i>Ljust/Mörkt tema</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

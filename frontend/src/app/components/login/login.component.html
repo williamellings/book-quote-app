@@ -1,0 +1,98 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+      <div class="card card-hover shadow-sm rounded-4 border-0 p-4 p-md-5">
+        <div class="text-center mb-4">
+          <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-3" style="width: 64px; height: 64px;">
+            <i class="fa-solid fa-lock fs-3"></i>
+          </div>
+          <h2 class="fw-bold">Logga in</h2>
+          <p class="text-muted">Välkommen tillbaka! Ange dina uppgifter nedan.</p>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="alert alert-danger d-flex align-items-center gap-2 mb-4" role="alert">
+            <i class="fa-solid fa-circle-exclamation flex-shrink-0"></i>
+            <div>{{ errorMessage() }}</div>
+          </div>
+        }
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Username / Email -->
+          <div class="mb-3">
+            <label for="username" class="form-label fw-semibold">Användarnamn eller e-post</label>
+            <div class="input-group">
+              <span class="input-group-text bg-body-tertiary border-end-0">
+                <i class="fa-solid fa-user text-muted"></i>
+              </span>
+              <input
+                id="username"
+                type="text"
+                class="form-control border-start-0 ps-0"
+                formControlName="username"
+                placeholder="demo eller din@epost.se"
+                [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+              />
+            </div>
+            @if (loginForm.get('username')?.invalid && loginForm.get('username')?.touched) {
+              <div class="text-danger small mt-1">Vänligen ange användarnamn eller e-post.</div>
+            }
+          </div>
+
+          <!-- Password -->
+          <div class="mb-4">
+            <label for="password" class="form-label fw-semibold">Lösenord</label>
+            <div class="input-group">
+              <span class="input-group-text bg-body-tertiary border-end-0">
+                <i class="fa-solid fa-key text-muted"></i>
+              </span>
+              <input
+                id="password"
+                type="password"
+                class="form-control border-start-0 ps-0"
+                formControlName="password"
+                placeholder="Ditt lösenord"
+                [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              />
+            </div>
+            @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+              <div class="text-danger small mt-1">Lösenordet måste vara minst 6 tecken.</div>
+            }
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            class="btn btn-primary-gradient w-100 py-2 rounded-pill fw-semibold d-flex align-items-center justify-content-center gap-2 mb-3"
+            [disabled]="isLoading()"
+          >
+            @if (isLoading()) {
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span>Loggar in...</span>
+            } @else {
+              <i class="fa-solid fa-right-to-bracket"></i>
+              <span>Logga in</span>
+            }
+          </button>
+
+          <!-- Demo user quick-fill helper -->
+          <div class="text-center mb-3">
+            <button
+              type="button"
+              class="btn btn-link btn-sm text-decoration-none text-muted"
+              (click)="fillDemo()"
+            >
+              <i class="fa-solid fa-wand-magic-sparkles me-1 text-warning"></i>
+              Fyll i förinlagt demokonto (demo / Demo123!)
+            </button>
+          </div>
+
+          <div class="text-center pt-3 border-top">
+            <span class="text-muted">Har du inget konto än? </span>
+            <a routerLink="/register" class="fw-semibold text-decoration-none">Registrera dig här</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

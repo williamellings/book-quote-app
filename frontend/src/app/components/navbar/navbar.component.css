@@ -1,0 +1,12 @@
+.nav-link {
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background-color: var(--bs-tertiary-bg);
+}
+
+.nav-link.active {
+  background-color: var(--bs-primary-bg-subtle);
+}

@@ -1,0 +1,119 @@
+/* Modern Web Styling & Theme System */
+:root {
+  --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --quote-gradient: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+  --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+html {
+  font-family: var(--font-family);
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bs-tertiary-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Cards & Hover Effects */
+.card-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid var(--bs-border-color);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.15);
+}
+
+[data-bs-theme="dark"] .card-hover:hover {
+  box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Gradient text utility */
+.text-gradient-primary {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-quote {
+  background: var(--quote-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom buttons */
+.btn-primary-gradient {
+  background: var(--primary-gradient);
+  border: none;
+  color: #fff !important;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+  transition: all 0.2s ease;
+}
+
+.btn-primary-gradient:hover {
+  opacity: 0.95;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.35);
+}
+
+/* Quote card specific styling */
+.quote-card {
+  position: relative;
+  overflow: hidden;
+  border-left: 4px solid #4f46e5;
+}
+
+.quote-card .quote-icon-bg {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  font-size: 4rem;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* Badge styling */
+.badge-category {
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  padding: 0.4em 0.8em;
+  border-radius: 9999px;
+}
+
+/* Navbar styling */
+.navbar-custom {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07);
+  z-index: 1030;
+}
+
+/* Footer stick to bottom */
+footer {
+  margin-top: auto;
+}
