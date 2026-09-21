@@ -1,9 +1,5 @@
 # Bok- & Citatportal (CRUD med Tokenhantering)
 
-Detta är min inlämningsuppgift för en fullstack webbapplikation med CRUD-funktionalitet och användarverifiering. Applikationen är byggd med **Angular 20** i frontend och ett **.NET 9 C# Web API** i backend med **Entity Framework Core (SQLite)**.
-
----
-
 ## 📌 Funktionalitet & Uppfyllda krav
 
 ### 1. Bokhantering (CRUD)
